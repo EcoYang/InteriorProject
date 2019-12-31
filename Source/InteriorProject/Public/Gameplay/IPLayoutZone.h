@@ -8,6 +8,7 @@
 
 class UBoxComponent;
 class UTextRenderComponent;
+class AIPLayoutZoneManager;
 
 UCLASS()
 class INTERIORPROJECT_API AIPLayoutZone : public AActor
@@ -19,6 +20,7 @@ protected:
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	//~ End AActor Interface
 
 protected:
@@ -27,11 +29,14 @@ protected:
 	UBoxComponent * ZoneLayout;
 
 #if WITH_EDITORONLY_DATA
+	/** Text Component Renderer For Zone Layout */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Zone")
-	UTextRenderComponent * TextComponent;
-
+	UTextRenderComponent * TextComponent; 
 #endif
-
-public:	
-
+	 
+private:
+	//~ Static Values
+	static uint32 s_InstanceIndex;
+	static AIPLayoutZoneManager* s_ZoneManager; 
+	//~ End Static Values
 };
