@@ -9,18 +9,18 @@
 UCLASS()
 class INTERIORPROJECT_API AIPLayout : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_UCLASS_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	AIPLayout();
+protected:
+	//~ Start AActor Interface
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
+	//~ End AActor Interface
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	/** Layout Root Static Mesh Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Static Mesh")
+	UStaticMeshComponent * LayoutStaticMesh;
+	
 
 };

@@ -3,12 +3,16 @@
 
 #include "Gameplay/IPLayout.h"
 
-// Sets default values
-AIPLayout::AIPLayout()
-{
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+#include <Components/StaticMeshComponent.h>
 
+// Sets default values
+AIPLayout::AIPLayout(const class FObjectInitializer & ObjectInitializer)
+	:Super(ObjectInitializer)
+{
+	LayoutStaticMesh = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("Root Static Mesh"));
+	RootComponent = LayoutStaticMesh;
+
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
