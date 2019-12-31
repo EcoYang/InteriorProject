@@ -11,7 +11,7 @@ AIPFurniture::AIPFurniture(const class FObjectInitializer & ObjectInitializer)
 	:Super(ObjectInitializer)
 { 
 	CollisionComponent  = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("Root Collision Component"));
-	CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	RootComponent = CollisionComponent;
 
 	FurnitureStaticMesh = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("Furniture Static Mesh"));

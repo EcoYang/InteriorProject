@@ -22,6 +22,7 @@ AIPLayoutZone::AIPLayoutZone(const class FObjectInitializer & ObjectInitializer)
 	ZoneLayout = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("Layout Zone Box"));
 	ZoneLayout->InitBoxExtent(FVector(250.f));
 	ZoneLayout->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ZoneLayout->SetGenerateOverlapEvents(false);
 	ZoneLayout->SetShouldUpdatePhysicsVolume(false);
 	RootComponent = ZoneLayout;
 
