@@ -21,6 +21,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 	//~ End AActor Interface
 
 protected:
@@ -33,10 +36,14 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Zone")
 	UTextRenderComponent * TextComponent; 
 #endif
-	 
+protected:
+	/** Layout Name in Text */
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Zone")
+	FText LayoutName;
+	
 private:
 	//~ Static Values
-	static uint32 s_InstanceIndex;
+	static int32 s_InstanceIndex;
 	static AIPLayoutZoneManager* s_ZoneManager; 
 	//~ End Static Values
 };

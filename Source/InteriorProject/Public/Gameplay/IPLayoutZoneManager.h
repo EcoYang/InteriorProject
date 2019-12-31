@@ -20,7 +20,7 @@ class INTERIORPROJECT_API AIPLayoutZoneManager : public AInfo
 	
 protected:
 	// Only Unique Value Is available
-	UPROPERTY(Transient, BlueprintReadOnly, Category = "Zone")
+	UPROPERTY(Transient, BlueprintReadOnly, VisibleAnywhere, Category = "Zone")
 	TSet<AIPLayoutZone*> SetOfLayoutZone;
 
 public:

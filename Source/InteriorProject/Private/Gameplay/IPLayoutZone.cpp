@@ -6,13 +6,14 @@
 #include "Online/IPGameModeBase.h"
 
 #include <Components/BoxComponent.h>
+#include <Math/UnrealMathUtility.h>
 
 #if WITH_EDITORONLY_DATA
 #include <Components/TextRenderComponent.h>
 #endif
  
 AIPLayoutZoneManager * AIPLayoutZone::s_ZoneManager = nullptr;
-uint32 AIPLayoutZone::s_InstanceIndex = 0;
+int32 AIPLayoutZone::s_InstanceIndex = 0;
 
 // Sets default values
 AIPLayoutZone::AIPLayoutZone(const class FObjectInitializer & ObjectInitializer)
@@ -24,26 +25,31 @@ AIPLayoutZone::AIPLayoutZone(const class FObjectInitializer & ObjectInitializer)
 	ZoneLayout->SetShouldUpdatePhysicsVolume(false);
 	RootComponent = ZoneLayout;
 
+	LayoutName = NSLOCTEXT("LayoutZoneName", "LayoutZoneName", "Layout Zone Name");
+
 #if WITH_EDITORONLY_DATA
 	TextComponent = ObjectInitializer.CreateEditorOnlyDefaultSubobject<UTextRenderComponent>(this, TEXT("Text Components"));
 	if (TextComponent) 
 	{
 		TextComponent->VerticalAlignment = EVerticalTextAligment::EVRTA_TextCenter;
-		TextComponent->HorizontalAlignment = EHorizTextAligment::EHTA_Center;
+		TextComponent->HorizontalAlignment = EHorizTextAligment::EHTA_Center;  
+		TextComponent->WorldSize = 128.f;
+		TextComponent->Text = LayoutName;
 		TextComponent->SetupAttachment(RootComponent);
 	}
 #endif
 
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AIPLayoutZone::PostInitializeComponents()
 {
-	++s_InstanceIndex;
 	Super::PostInitializeComponents();
 
 	UWorld* World = GetWorld();
-	if (!World) return;
+	if (!World || !World->IsGameWorld()) return;
+	
+	++s_InstanceIndex;
 
 	AIPGameModeBase * IPGameMode = CastChecked<AIPGameModeBase>(World->GetAuthGameMode());
 
@@ -73,12 +79,26 @@ void AIPLayoutZone::Tick(float DeltaTime)
 void AIPLayoutZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	if (s_InstanceIndex <= 0 || !IsValid(s_ZoneManager))
+	s_InstanceIndex = FMath::Max(0, s_InstanceIndex - 1);
+
+	if (s_InstanceIndex <= 0)
 	{
 		s_ZoneManager = nullptr;
 		return;
 	}
-
-	--s_InstanceIndex;
 }
+
+#if WITH_EDITOR
+void AIPLayoutZone::PostEditChangeProperty(FPropertyChangedEvent & PropertyChangedEvent)
+{
+	const FName & PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.GetPropertyName() : NAME_None;
+
+	if (PropertyName == GET_MEMBER_NAME_CHECKED(AIPLayoutZone, LayoutName) && TextComponent)
+	{
+		TextComponent->Text = LayoutName;
+	}	
+
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+}
+#endif
 
