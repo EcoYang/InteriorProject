@@ -16,8 +16,14 @@ class INTERIORPROJECT_API AIPFurniture : public AActor
 	 
 protected:
 	//~ Start AActor Interface
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	virtual void PostEditMove(bool bFinished) override;
+	virtual void PostEditUndo() override;
+#endif
 	//~ End AActor Interface
 
 protected:
@@ -27,6 +33,8 @@ protected:
 
 	/** Collision Component */
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Collision")
-	UBoxComponent * CollisionComponent;
+	UBoxComponent * CollisionComponent; 
 
+private:
+	void UpdateFurnitureBound();
 };

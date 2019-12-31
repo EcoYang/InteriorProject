@@ -18,9 +18,16 @@ AIPFurniture::AIPFurniture(const class FObjectInitializer & ObjectInitializer)
 	FurnitureStaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	FurnitureStaticMesh->SetupAttachment(RootComponent);
 
-	CollisionComponent->InitBoxExtent(GetComponentsBoundingBox().GetExtent());
+	UpdateFurnitureBound();
 
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AIPFurniture::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	UpdateFurnitureBound();
 }
 
 // Called when the game starts or when spawned
@@ -37,3 +44,41 @@ void AIPFurniture::Tick(float DeltaTime)
 
 }
 
+void AIPFurniture::UpdateFurnitureBound()
+{
+	if (!CollisionComponent) return;
+
+	CollisionComponent->SetBoxExtent(GetComponentsBoundingBox().GetExtent(), false);
+}
+
+#if WITH_EDITOR
+void AIPFurniture::PostEditChangeProperty(FPropertyChangedEvent & PropertyChangedEvent)
+{
+	const FName & PropertyName = PropertyChangedEvent.Property ? PropertyChangedEvent.GetPropertyName() : NAME_None;
+
+	if (PropertyName == GET_MEMBER_NAME_CHECKED(AIPFurniture, FurnitureStaticMesh) && FurnitureStaticMesh)
+	{ 
+		UpdateFurnitureBound();
+	}
+
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+}
+
+void AIPFurniture::PostEditMove(bool bFinished)
+{
+	if (bFinished)
+	{ 
+		UpdateFurnitureBound();
+	}
+
+	MarkComponentsRenderStateDirty();
+	Super::PostEditMove(bFinished);
+}
+
+void AIPFurniture::PostEditUndo()
+{
+	Super::PostEditUndo();
+
+	UpdateFurnitureBound();
+}
+#endif
