@@ -24,7 +24,7 @@ protected:
 	//~ End AActor Interface
 
 protected:
-	// Root Component for Zone Layout
+	/** Root Component for Zone Layout */ 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Zone")
 	UBoxComponent * ZoneLayout;
 

@@ -39,6 +39,7 @@ AIPLayoutZone::AIPLayoutZone(const class FObjectInitializer & ObjectInitializer)
 
 void AIPLayoutZone::PostInitializeComponents()
 {
+	++s_InstanceIndex;
 	Super::PostInitializeComponents();
 
 	UWorld* World = GetWorld();
@@ -48,7 +49,6 @@ void AIPLayoutZone::PostInitializeComponents()
 	s_ZoneManager = IPGameMode->GetZoneManager();
 
 	s_ZoneManager->RegisterZone(this);
-	++s_InstanceIndex;
 }
 
 // Called when the game starts or when spawned
@@ -68,11 +68,12 @@ void AIPLayoutZone::Tick(float DeltaTime)
 void AIPLayoutZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-
-	--s_InstanceIndex;
 	if (s_InstanceIndex <= 0 || !IsValid(s_ZoneManager))
 	{
 		s_ZoneManager = nullptr;
+		return;
 	}
+
+	--s_InstanceIndex;
 }
 
