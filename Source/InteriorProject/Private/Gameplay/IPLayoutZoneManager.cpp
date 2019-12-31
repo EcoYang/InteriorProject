@@ -27,6 +27,6 @@ void AIPLayoutZoneManager::DeregisterZone(AActor * Zone, EEndPlayReason::Type En
 {
 	if (!IsValid(Zone)) return;
 
-	UE_LOG(LogLayoutZoneManager, Log, TEXT("Removing : ($s)"), *Zone->GetName() );
+	UE_LOG(LogLayoutZoneManager, Log, TEXT("Removing : (%s)"), *Zone->GetName() );
 	SetOfLayoutZone.Remove(Cast<AIPLayoutZone>(Zone));
 }

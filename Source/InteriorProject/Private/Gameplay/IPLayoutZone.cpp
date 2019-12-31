@@ -43,11 +43,16 @@ void AIPLayoutZone::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	UWorld* World = GetWorld();
-	if (!World || IsValid(s_ZoneManager)) return;
+	if (!World) return;
 
 	AIPGameModeBase * IPGameMode = CastChecked<AIPGameModeBase>(World->GetAuthGameMode());
-	s_ZoneManager = IPGameMode->GetZoneManager();
 
+	if(!IsValid(s_ZoneManager))
+	{
+		s_ZoneManager = IPGameMode->GetZoneManager();
+	}
+
+	ensure(s_ZoneManager);
 	s_ZoneManager->RegisterZone(this);
 }
 
