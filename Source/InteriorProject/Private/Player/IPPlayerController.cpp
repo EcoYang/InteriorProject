@@ -3,3 +3,6 @@
 
 #include "Player/IPPlayerController.h"
 
+AIPPlayerController::AIPPlayerController()
+{ 
+}
