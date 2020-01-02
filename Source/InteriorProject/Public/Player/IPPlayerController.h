@@ -14,4 +14,6 @@ class INTERIORPROJECT_API AIPPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+
 };
